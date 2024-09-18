@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount Calculation Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #4CAF50;
+        }
+        .result {
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .back-link {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 style="text-align: center;">Calculation Results</h2>
+    <div class="result">
+        <p>Discount: <span th:text="${discount}">0</span>%</p>
+        <p>Original Price: <span th:text="${original}">0.00</span> PLN</p>
+        <p>Current Price: <span th:text="${current}">0.00</span> PLN</p>
+    </div>
+
+    <a href="/" class="back-link">Back to Calculator</a>
+</div>
+
+</body>
+</html>
