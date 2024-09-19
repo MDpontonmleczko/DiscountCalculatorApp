@@ -1,10 +1,10 @@
 package com.md.calculator;
 
-import com.md.calculator.counters.DiscountPriceCounter;
-import com.md.calculator.counters.CurrentPriceCounter;
+import com.md.calculator.counters.DiscountValueCounter;
+import com.md.calculator.counters.DiscountedPriceCounter;
 import com.md.calculator.counters.OriginalPriceCounter;
-import com.md.calculator.valueData.DiscountPrice;
-import com.md.calculator.valueData.CurrentPrice;
+import com.md.calculator.valueData.DiscountValue;
+import com.md.calculator.valueData.DiscountedPrice;
 import com.md.calculator.valueData.OriginalPrice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,63 +29,66 @@ public class CalculatorController {
 
     @PostMapping("/calculateDiscountPrice")
     public String calculateDiscount(
-            @RequestParam Double original,
-            @RequestParam Double current,
+            @RequestParam(value = "original", required = false) Double original,
+            @RequestParam(value = "current", required = false) Double current,
             Model model) {
 
         logger.info("Original Price: {}", original);
         logger.info("New Price: {}", current);
 
         OriginalPrice originalPrice = new OriginalPrice(original);
-        CurrentPrice currentPrice = new CurrentPrice(current);
+        DiscountedPrice discountedPrice = new DiscountedPrice(current);
 
-        Double discount = new DiscountPriceCounter(originalPrice, currentPrice).count();
+        Double discount = new DiscountValueCounter(originalPrice, discountedPrice).count();
+        DiscountValue discountValue = new DiscountValue(discount);
 
-        model.addAttribute("discount", discount);
-        model.addAttribute("original", original);
-        model.addAttribute("current", current);
+        model.addAttribute("discount", discountValue.getValue());
+        model.addAttribute("original", originalPrice.getValue());
+        model.addAttribute("current", discountedPrice.getValue());
 
         return "calculateResults";
     }
 
     @PostMapping("/calculateCurrentPrice")
     public String calculateNewPrice(
-            @RequestParam Double original,
-            @RequestParam Double discount,
+            @RequestParam(value = "original", required = false) Double original,
+            @RequestParam(value = "discount", required = false) Double discount,
             Model model) {
 
         logger.info("Original Price: {}", original);
         logger.info("New Price: {}", discount);
 
         OriginalPrice originalPrice = new OriginalPrice(original);
-        DiscountPrice discountPrice = new DiscountPrice(discount);
+        DiscountValue discountValue = new DiscountValue(discount);
 
-        Double current = new CurrentPriceCounter(originalPrice, discountPrice).count();
+        Double current = new DiscountedPriceCounter(originalPrice, discountValue).count();
+        DiscountedPrice discountedPrice = new DiscountedPrice(current);
 
-        model.addAttribute("discount", discount);
-        model.addAttribute("original", original);
-        model.addAttribute("current", current);
+        model.addAttribute("discount", discountValue.getValue());
+        model.addAttribute("original", originalPrice.getValue());
+        model.addAttribute("current", discountedPrice.getValue());
 
         return "calculateResults";
     }
 
     @PostMapping("/calculateOriginalPrice")
     public String calculateOriginalPrice(
-            @RequestParam Double current,
-            @RequestParam Double discount,
+            @RequestParam(value = "current", required = false) Double current,
+            @RequestParam(value = "discount", required = false) Double discount,
             Model model) {
 
         logger.info("Original Price: {}", current);
         logger.info("New Price: {}", discount);
 
-        CurrentPrice currentPrice = new CurrentPrice (current);
-        DiscountPrice discountPrice = new DiscountPrice(discount);
+        DiscountedPrice discountedPrice = new DiscountedPrice(current);
+        DiscountValue discountValue = new DiscountValue(discount);
 
-        Double original = new OriginalPriceCounter(currentPrice, discountPrice).count();
+        Double original = new OriginalPriceCounter(discountedPrice, discountValue).count();
+        OriginalPrice originalPrice = new OriginalPrice(original);
 
-        model.addAttribute("discount", discount);
-        model.addAttribute("original", original);
-        model.addAttribute("current", current);
+        model.addAttribute("discount", discountValue.getValue());
+        model.addAttribute("original", originalPrice.getValue());
+        model.addAttribute("current", discountedPrice.getValue());
 
         return "calculateResults";
     }

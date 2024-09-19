@@ -1,11 +1,11 @@
 package com.md.calculator.valueData;
 
-public class CurrentPrice {
+public class DiscountedPrice {
 
     Double value;
 
-    public CurrentPrice(Double value) {
-        if (value < 0.0) {
+    public DiscountedPrice(Double value) {
+        if (value == null || value < 0.0) {
             this.value = 0.0;
         } else {
             this.value = value;

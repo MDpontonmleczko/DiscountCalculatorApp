@@ -1,20 +1,20 @@
 package com.md.calculator.counters;
 
-import com.md.calculator.valueData.DiscountPrice;
-import com.md.calculator.valueData.CurrentPrice;
+import com.md.calculator.valueData.DiscountValue;
+import com.md.calculator.valueData.DiscountedPrice;
 
 public class OriginalPriceCounter extends Counter {
 
-    private final CurrentPrice currentPrice;
-    private final DiscountPrice discountPrice;
+    private final DiscountedPrice discountedPrice;
+    private final DiscountValue discountValue;
 
-    public OriginalPriceCounter(CurrentPrice currentPrice, DiscountPrice discountPrice) {
-        this.currentPrice = currentPrice;
-        this.discountPrice = discountPrice;
+    public OriginalPriceCounter(DiscountedPrice discountedPrice, DiscountValue discountValue) {
+        this.discountedPrice = discountedPrice;
+        this.discountValue = discountValue;
     }
 
     @Override
     public double count() {
-        return 100 * this.currentPrice.getValue() / (100 - this.discountPrice.getValue());
+        return 100 * this.discountedPrice.getValue() / (100 - this.discountValue.getValue());
     }
 }
